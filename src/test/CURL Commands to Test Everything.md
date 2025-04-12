@@ -1,4 +1,4 @@
-Alright! Let's run through **all the important `curl` tests** for your API now. 🚀
+Alright! Let's run through **all the important `curl -k` tests** for your API now. 🚀
 
 Here’s **your current endpoint structure**:
 
@@ -10,11 +10,11 @@ Here’s **your current endpoint structure**:
 
 ---
 
-## 🔥 CURL Commands to Test Everything
+## 🔥 curl -k Commands to Test Everything
 
 ### 1. Public Hello (no auth)
 ```bash
-curl http://localhost:8080/api/public/hello
+curl -k https://localhost:9000/api/public/hello
 ```
 ✅ Should return:
 ```text
@@ -28,7 +28,7 @@ Hello, public user: anonymous
 Assuming username: `user`, password: `user`
 
 ```bash
-curl -u user:user http://localhost:8080/api/user/hello
+curl -k -u user:user https://localhost:9000/api/user/hello
 ```
 ✅ Should return:
 ```text
@@ -42,7 +42,7 @@ Hello, user: user
 Assuming username: `admin`, password: `admin`
 
 ```bash
-curl -u admin:admin http://localhost:8080/api/user/hello
+curl -k -u admin:admin https://localhost:9000/api/user/hello
 ```
 ✅ Should return:
 ```text
@@ -55,7 +55,7 @@ Hello, user: admin
 ### 4. Admin Hello (with admin credentials)
 
 ```bash
-curl -u admin:admin http://localhost:8080/api/admin/hello
+curl -k -u admin:admin https://localhost:9000/api/admin/hello
 ```
 ✅ Should return:
 ```text
@@ -67,7 +67,7 @@ Hello, admin: admin
 ### 5. Admin Hello (with user credentials)
 
 ```bash
-curl -u user:user http://localhost:8080/api/admin/hello
+curl -k -u user:user https://localhost:9000/api/admin/hello
 ```
 ❌ Should return:
 ```json
@@ -85,24 +85,24 @@ curl -u user:user http://localhost:8080/api/admin/hello
 
 ## ⚡ Quick Tips:
 
-- `-k` tells `curl` to **ignore SSL warnings** (because you’re using a self-signed cert).
+- `-k` tells `curl -k` to **ignore SSL warnings** (because you’re using a self-signed cert).
 - `-u username:password` adds **Basic Auth** credentials.
 
 ---
 
 ## Bonus ✨
-You can group your CURLs into a test script:
+You can group your curl -ks into a test script:
 
 ```bash
 #!/bin/bash
 
-curl http://localhost:8080/api/public/hello
-curl -u user:user http://localhost:8080/api/user/hello
-curl -u admin:admin http://localhost:8080/api/user/hello
-curl -u admin:admin http://localhost:8080/api/admin/hello
-curl -u user:user http://localhost:8080/api/admin/hello
-curl http://localhost:8080/api/user/hello
-curl http://localhost:8080/api/admin/hello
+curl -k https://localhost:9000/api/public/hello
+curl -k -u user:user https://localhost:9000/api/user/hello
+curl -k -u admin:admin https://localhost:9000/api/user/hello
+curl -k -u admin:admin https://localhost:9000/api/admin/hello
+curl -k -u user:user https://localhost:9000/api/admin/hello
+curl -k https://localhost:9000/api/user/hello
+curl -k https://localhost:9000/api/admin/hello
 ```
 Save as `test-apis.sh`, then run:
 ```bash
@@ -114,14 +114,14 @@ bash test-apis.sh
 
 
 
-Awesome! Here's **all the `curl` commands** you need 🚀:
+Awesome! Here's **all the `curl -k` commands** you need 🚀:
 
 ---
 
 ### 1. 🔓 Public API - No Authentication Needed
 
 ```bash
-curl -v http://localhost:8080/api/public/hello
+curl -k -v https://localhost:9000/api/public/hello
 ```
 
 ---
@@ -131,13 +131,13 @@ curl -v http://localhost:8080/api/public/hello
 ✅ As **user:user**:
 
 ```bash
-curl -v -u user:user http://localhost:8080/api/user/hello
+curl -k -v -u user:user https://localhost:9000/api/user/hello
 ```
 
 ✅ As **admin:admin** (should work because ADMIN also allowed):
 
 ```bash
-curl -v -u admin:admin http://localhost:8080/api/user/hello
+curl -k -v -u admin:admin https://localhost:9000/api/user/hello
 ```
 
 ---
@@ -147,25 +147,25 @@ curl -v -u admin:admin http://localhost:8080/api/user/hello
 ✅ As **admin:admin**:
 
 ```bash
-curl -v -u admin:admin http://localhost:8080/api/admin/hello
+curl -k -v -u admin:admin https://localhost:9000/api/admin/hello
 ```
 
 ❌ As **user:user** (should return **403 Forbidden**):
 
 ```bash
-curl -v -u user:user http://localhost:8080/api/admin/hello
+curl -k -v -u user:user https://localhost:9000/api/admin/hello
 ```
 
 ---
 
 > ℹ️ **Notes:**
-> - The `-k` flag tells `curl` to **allow self-signed SSL certificates** (because you’re using a local http server).
+> - The `-k` flag tells `curl -k` to **allow self-signed SSL certificates** (because you’re using a local https server).
 > - The `-v` flag makes it verbose so you can see headers, SSL handshake, etc.
 
 ---
 
 
-Perfect! Here's a clean **bash script** 📜 that will automatically **run all the curl tests** for you:
+Perfect! Here's a clean **bash script** 📜 that will automatically **run all the curl -k tests** for you:
 
 ---
 
@@ -177,31 +177,31 @@ Perfect! Here's a clean **bash script** 📜 that will automatically **run all t
 echo "============================="
 echo "🔓 Testing Public API (no auth)"
 echo "============================="
-curl -v http://localhost:8080/api/public/hello
+curl -k -v https://localhost:9000/api/public/hello
 echo -e "\n\n"
 
 echo "============================="
 echo "🔒 Testing User API with USER credentials"
 echo "============================="
-curl -v -u user:user http://localhost:8080/api/user/hello
+curl -k -v -u user:user https://localhost:9000/api/user/hello
 echo -e "\n\n"
 
 echo "============================="
 echo "🔒 Testing User API with ADMIN credentials"
 echo "============================="
-curl -v -u admin:admin http://localhost:8080/api/user/hello
+curl -k -v -u admin:admin https://localhost:9000/api/user/hello
 echo -e "\n\n"
 
 echo "============================="
 echo "🔒 Testing Admin API with ADMIN credentials"
 echo "============================="
-curl -v -u admin:admin http://localhost:8080/api/admin/hello
+curl -k -v -u admin:admin https://localhost:9000/api/admin/hello
 echo -e "\n\n"
 
 echo "============================="
 echo "❌ Testing Admin API with USER credentials (Should FAIL)"
 echo "============================="
-curl -v -u user:user http://localhost:8080/api/admin/hello
+curl -k -v -u user:user https://localhost:9000/api/admin/hello
 echo -e "\n\n"
 
 echo "🎯 All tests completed!"
@@ -238,7 +238,7 @@ Would you also like me to show a **cleaner** version that **hides** the SSL warn
 Awesome! 🚀  
 Here’s a **cleaner** version of the script — this one **hides SSL warnings** and **only shows**:
 
-- HTTP status code (`200 OK`, `403 Forbidden`, etc.)
+- https status code (`200 OK`, `403 Forbidden`, etc.)
 - Response body (`Hello, user!`, `Forbidden`, etc.)
 
 ---
@@ -258,9 +258,9 @@ function call_api() {
   echo "============================="
 
   if [ -z "$userpass" ]; then
-    curl -s -o /tmp/response.txt -w "%{http_code}\n" "$url"
+    curl -k -s -o /tmp/response.txt -w "%{https_code}\n" "$url"
   else
-    curl -s -o /tmp/response.txt -w "%{http_code}\n" -u "$userpass" "$url"
+    curl -k -s -o /tmp/response.txt -w "%{https_code}\n" -u "$userpass" "$url"
   fi
 
   echo -n "Response: "
@@ -269,19 +269,19 @@ function call_api() {
 }
 
 # 🔓 Public API (no auth)
-call_api "🔓 Testing Public API (no auth)" "http://localhost:8080/api/public/hello"
+call_api "🔓 Testing Public API (no auth)" "https://localhost:9000/api/public/hello"
 
 # 🔒 User API with USER credentials
-call_api "🔒 Testing User API with USER credentials" "http://localhost:8080/api/user/hello" "user:user"
+call_api "🔒 Testing User API with USER credentials" "https://localhost:9000/api/user/hello" "user:user"
 
 # 🔒 User API with ADMIN credentials
-call_api "🔒 Testing User API with ADMIN credentials" "http://localhost:8080/api/user/hello" "admin:admin"
+call_api "🔒 Testing User API with ADMIN credentials" "https://localhost:9000/api/user/hello" "admin:admin"
 
 # 🔒 Admin API with ADMIN credentials
-call_api "🔒 Testing Admin API with ADMIN credentials" "http://localhost:8080/api/admin/hello" "admin:admin"
+call_api "🔒 Testing Admin API with ADMIN credentials" "https://localhost:9000/api/admin/hello" "admin:admin"
 
 # ❌ Admin API with USER credentials (Should fail)
-call_api "❌ Testing Admin API with USER credentials (Should FAIL)" "http://localhost:8080/api/admin/hello" "user:user"
+call_api "❌ Testing Admin API with USER credentials (Should FAIL)" "https://localhost:9000/api/admin/hello" "user:user"
 
 echo "🎯 All tests completed!"
 ```
@@ -370,35 +370,35 @@ function test_api() {
   description=$1
   url=$2
   userpass=$3
-  expected_http=$4
+  expected_https=$4
 
   if [ -z "$userpass" ]; then
-    status_code=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+    status_code=$(curl -k -s -o /dev/null -w "%{https_code}" "$url")
   else
-    status_code=$(curl -s -o /dev/null -w "%{http_code}" -u "$userpass" "$url")
+    status_code=$(curl -k -s -o /dev/null -w "%{https_code}" -u "$userpass" "$url")
   fi
 
-  if [ "$status_code" == "$expected_http" ]; then
+  if [ "$status_code" == "$expected_https" ]; then
     echo "✅ $description"
   else
-    echo "❌ $description (Expected $expected_http but got $status_code)"
+    echo "❌ $description (Expected $expected_https but got $status_code)"
   fi
 }
 
 # 🔓 Public API (should be 200 without auth)
-test_api "Public API (no auth)" "http://localhost:8080/api/public/hello" "" "200"
+test_api "Public API (no auth)" "https://localhost:9000/api/public/hello" "" "200"
 
 # 🔒 User API with USER credentials (should be 200)
-test_api "User API (user creds)" "http://localhost:8080/api/user/hello" "user:user" "200"
+test_api "User API (user creds)" "https://localhost:9000/api/user/hello" "user:user" "200"
 
 # 🔒 User API with ADMIN credentials (should be 200)
-test_api "User API (admin creds)" "http://localhost:8080/api/user/hello" "admin:admin" "200"
+test_api "User API (admin creds)" "https://localhost:9000/api/user/hello" "admin:admin" "200"
 
 # 🔒 Admin API with ADMIN credentials (should be 200)
-test_api "Admin API (admin creds)" "http://localhost:8080/api/admin/hello" "admin:admin" "200"
+test_api "Admin API (admin creds)" "https://localhost:9000/api/admin/hello" "admin:admin" "200"
 
 # ❌ Admin API with USER credentials (should be 403 forbidden)
-test_api "Admin API (user creds)" "http://localhost:8080/api/admin/hello" "user:user" "403"
+test_api "Admin API (user creds)" "https://localhost:9000/api/admin/hello" "user:user" "403"
 
 echo "🏁 All tests finished."
 ```
@@ -433,7 +433,7 @@ chmod +x test_apis_result_only.sh
 
 | Script | Style | Use |
 |:------|:------|:---|
-| `test_apis_clean.sh` | See responses + HTTP codes | Good for local dev |
+| `test_apis_clean.sh` | See responses + https codes | Good for local dev |
 | `test_apis_result_only.sh` | Only ✅/❌ results | Good for **automation / CI/CD** |
 
 ---
@@ -470,28 +470,28 @@ function test_api() {
   description=$1
   url=$2
   userpass=$3
-  expected_http=$4
+  expected_https=$4
 
   if [ -z "$userpass" ]; then
-    status_code=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+    status_code=$(curl -k -s -o /dev/null -w "%{https_code}" "$url")
   else
-    status_code=$(curl -s -o /dev/null -w "%{http_code}" -u "$userpass" "$url")
+    status_code=$(curl -k -s -o /dev/null -w "%{https_code}" -u "$userpass" "$url")
   fi
 
-  if [ "$status_code" == "$expected_http" ]; then
+  if [ "$status_code" == "$expected_https" ]; then
     echo "✅ $description" | tee -a "$OUTPUT_FILE"
   else
-    echo "❌ $description (Expected $expected_http but got $status_code)" | tee -a "$OUTPUT_FILE"
+    echo "❌ $description (Expected $expected_https but got $status_code)" | tee -a "$OUTPUT_FILE"
     FAILURE=1
   fi
 }
 
 # Run tests
-test_api "Public API (no auth)" "http://localhost:8080/api/public/hello" "" "200"
-test_api "User API (user creds)" "http://localhost:8080/api/user/hello" "user:user" "200"
-test_api "User API (admin creds)" "http://localhost:8080/api/user/hello" "admin:admin" "200"
-test_api "Admin API (admin creds)" "http://localhost:8080/api/admin/hello" "admin:admin" "200"
-test_api "Admin API (user creds)" "http://localhost:8080/api/admin/hello" "user:user" "403"
+test_api "Public API (no auth)" "https://localhost:9000/api/public/hello" "" "200"
+test_api "User API (user creds)" "https://localhost:9000/api/user/hello" "user:user" "200"
+test_api "User API (admin creds)" "https://localhost:9000/api/user/hello" "admin:admin" "200"
+test_api "Admin API (admin creds)" "https://localhost:9000/api/admin/hello" "admin:admin" "200"
+test_api "Admin API (user creds)" "https://localhost:9000/api/admin/hello" "user:user" "403"
 
 echo "----------------------------" | tee -a "$OUTPUT_FILE"
 echo "🏁 All tests finished." | tee -a "$OUTPUT_FILE"
@@ -580,35 +580,35 @@ function test_api() {
   description=$1
   url=$2
   userpass=$3
-  expected_http=$4
+  expected_https=$4
 
   start_time=$(date +%s%3N)  # milliseconds
 
   if [ -z "$userpass" ]; then
-    status_code=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+    status_code=$(curl -k -s -o /dev/null -w "%{https_code}" "$url")
   else
-    status_code=$(curl -s -o /dev/null -w "%{http_code}" -u "$userpass" "$url")
+    status_code=$(curl -k -s -o /dev/null -w "%{https_code}" -u "$userpass" "$url")
   fi
 
   end_time=$(date +%s%3N)
   duration=$((end_time - start_time))
 
-  if [ "$status_code" == "$expected_http" ]; then
+  if [ "$status_code" == "$expected_https" ]; then
     echo -e "${GREEN}✅ $description (${duration} ms)${NC}" | tee -a "$OUTPUT_TEXT"
     echo "<li style='color:green;'>✅ $description (${duration} ms)</li>" >> "$OUTPUT_HTML"
   else
-    echo -e "${RED}❌ $description (Expected $expected_http but got $status_code) (${duration} ms)${NC}" | tee -a "$OUTPUT_TEXT"
-    echo "<li style='color:red;'>❌ $description (Expected $expected_http but got $status_code) (${duration} ms)</li>" >> "$OUTPUT_HTML"
+    echo -e "${RED}❌ $description (Expected $expected_https but got $status_code) (${duration} ms)${NC}" | tee -a "$OUTPUT_TEXT"
+    echo "<li style='color:red;'>❌ $description (Expected $expected_https but got $status_code) (${duration} ms)</li>" >> "$OUTPUT_HTML"
     FAILURE=1
   fi
 }
 
 # Test cases
-test_api "Public API (no auth)" "http://localhost:8080/api/public/hello" "" "200"
-test_api "User API (user creds)" "http://localhost:8080/api/user/hello" "user:user" "200"
-test_api "User API (admin creds)" "http://localhost:8080/api/user/hello" "admin:admin" "200"
-test_api "Admin API (admin creds)" "http://localhost:8080/api/admin/hello" "admin:admin" "200"
-test_api "Admin API (user creds - expect forbidden)" "http://localhost:8080/api/admin/hello" "user:user" "403"
+test_api "Public API (no auth)" "https://localhost:9000/api/public/hello" "" "200"
+test_api "User API (user creds)" "https://localhost:9000/api/user/hello" "user:user" "200"
+test_api "User API (admin creds)" "https://localhost:9000/api/user/hello" "admin:admin" "200"
+test_api "Admin API (admin creds)" "https://localhost:9000/api/admin/hello" "admin:admin" "200"
+test_api "Admin API (user creds - expect forbidden)" "https://localhost:9000/api/admin/hello" "user:user" "403"
 
 # Finish
 echo "</ul><p>Test run completed at $(date)</p></body></html>" >> "$OUTPUT_HTML"
